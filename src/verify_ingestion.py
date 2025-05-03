@@ -42,11 +42,12 @@ def get_results(execution_id, athena):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run Athena query to verify data ingestion.")
     parser.add_argument("--profile", required=True, help="AWS CLI profile name")
+    parser.add_argument("--output-bucket", required=True, help="S3 Bucket name for output path for Athena results")
     args = parser.parse_args()
 
     athena = create_athena_client(args.profile)
     database = "churn_data"
-    output = "s3://kg-churn-prediction-data/athena-results/"
+    output = f"s3://{args.output_bucket}/athena-results/"
     workgroup = "churn-analytics"
     query = "SELECT * FROM raw_telco LIMIT 10"
 
