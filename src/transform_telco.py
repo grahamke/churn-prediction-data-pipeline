@@ -35,7 +35,6 @@ df_cleaned = (
         "total_charges",
         when(col("TotalCharges.string").isNotNull(), col("TotalCharges.string").cast("double"))
         .when(col("TotalCharges.double").isNotNull(), col("TotalCharges.double"))
-        .when(col("TotalCharges").cast("double").isNotNull(), col("TotalCharges").cast("double"))
         .otherwise(None)
     )
     .withColumn("is_senior", col("SeniorCitizen").cast("boolean"))
@@ -50,7 +49,10 @@ dyf_cleaned = DynamicFrame.fromDF(df_cleaned, glueContext, "dyf_cleaned")
 glueContext.write_dynamic_frame.from_options(
     frame=dyf_cleaned,
     connection_type="s3",
-    connection_options={"path": output_path},
+    connection_options={
+        "path": output_path,
+        "partitionKeys": ["did_churn"]
+    },
     format="parquet"
 )
 

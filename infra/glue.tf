@@ -138,7 +138,7 @@ resource "aws_glue_job" "transform_telco" {
   default_arguments = {
     "--job-bookmark-option" = "job-bookmark-disable"
     "--TempDir"             = "s3://${aws_s3_bucket.churn_data.bucket}/temp/"
-    "--output_path"         = "s3://${aws_s3_bucket.churn_data.bucket}/curated/telco"
+    "--output_path"         = "s3://${aws_s3_bucket.churn_data.bucket}/curated/partitioned_glue"
   }
 
   execution_class = "STANDARD"
